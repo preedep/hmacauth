@@ -17,6 +17,7 @@ mod tests {
         let result = utils::compute_content_sha256(&payload);
         assert_eq!(result, "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=");
     }
+    #[test]
     fn it_generate_signature(){
         let url = Url::parse("https://example.com").unwrap();
         let http_method = "GET";
@@ -28,5 +29,12 @@ mod tests {
                                                                        &json_payload);
         assert_eq!(compute_hash, "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=");
         assert_eq!(string_to_sign, "GET\n/\nSun, 06 Nov 1994 08:49:37 GMT;example.com;MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=");
+    }
+    #[test]
+    fn it_compute_signature() {
+        let string_to_sign = "GET\n/\nSun, 06 Nov 1994 08:49:37 GMT;example.com;MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=".to_string();
+        let access_key = "access_key12345678".to_string();
+        let result = utils::compute_signature(&string_to_sign, &access_key);
+        assert_eq!(result, "1");
     }
 }
