@@ -1,13 +1,12 @@
+use std::str::Split;
+use std::time::SystemTime;
+
+use base64::{Engine as _, engine::general_purpose};
 use hmac::{Hmac, Mac};
 use httpdate::fmt_http_date;
 use log::debug;
 use reqwest::header::HeaderMap;
 use sha2::{Digest, Sha256};
-
-use base64::{engine::general_purpose, Engine as _};
-use std::str::Split;
-use std::time::SystemTime;
-
 use url::Url;
 
 type HmacSha256 = Hmac<Sha256>;
@@ -44,8 +43,11 @@ pub fn get_request_header(
 ) -> Result<HeaderMap, String> {
     let mut header = HeaderMap::new();
 
-    let (compute_hash, http_date, string_to_sign) = generate_signature(url_endpoint,
+    let now = SystemTime::now();
+    let http_date = fmt_http_date(now);
+    let (compute_hash,string_to_sign) = generate_signature(url_endpoint,
                                                                        http_method,
+                                                                       &http_date,
                                                                        json_payload);
     debug!("{}\r\n", string_to_sign);
 
@@ -66,13 +68,14 @@ pub fn get_request_header(
     Ok(header)
 }
 
-fn generate_signature(url_endpoint: &Url,
+pub fn generate_signature(url_endpoint: &Url,
                       http_method: &str,
-                      json_payload: &String) -> (String, String, String) {
+                      http_date: &String,
+                      json_payload: &String) -> (String, String) {
     let compute_hash = compute_content_sha256(json_payload);
 
-    let now = SystemTime::now();
-    let http_date = fmt_http_date(now);
+    //let now = SystemTime::now();
+    //let http_date = fmt_http_date(now);
 
     let host_authority = format!("{}", url_endpoint.host().unwrap(), );
     let path_and_query = format!("{}?{}", url_endpoint.path(), url_endpoint.query().unwrap());
@@ -84,5 +87,5 @@ fn generate_signature(url_endpoint: &Url,
         host_authority,
         compute_hash.clone(),
     );
-    (compute_hash, http_date, string_to_sign)
+    (compute_hash, string_to_sign)
 }
