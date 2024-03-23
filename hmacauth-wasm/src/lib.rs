@@ -11,7 +11,8 @@ pub fn http_post_payload(url: String,
                          request_id: String,
                          message: String,
                          access_key: String,
-                         f_callback: &js_sys::Function) -> String {
+                         f_callback: &js_sys::Function
+                        ) -> String {
 
     let result = format!("Hello, {}", message);
     let payload = hmacauth_lib::models::Payload {
@@ -30,6 +31,8 @@ pub fn http_post_payload(url: String,
             header.iter().for_each(|(key, value)| {
                 let result = format!("{}: {}", key, value.to_str().unwrap());
                 console::log_1(&JsValue::from_str(&result));
+
+                //call back to javascript
                 f_callback.call1(&JsValue::NULL, &JsValue::from_str(&result)).unwrap();
             });
         }
