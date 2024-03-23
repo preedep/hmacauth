@@ -1,5 +1,5 @@
 use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
-use log::info;
+use log::{error, info};
 use actix_files as fs;
 use actix_files::NamedFile;
 use actix_web::middleware::Logger;
@@ -14,6 +14,10 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
     info!("Received headers: {:#?}", header_maps);
     let signed_header = utils::get_signed_header(&header_maps);
     info!("Received signed header: {:#?}", signed_header);
+    if signed_header.is_err() {
+        error!("Unauthorized");
+        return HttpResponse::Unauthorized().body("Unauthorized");
+    }
     let payload = payload.into_inner();
     info!("Received payload: {:#?}", payload);
     HttpResponse::Ok().json(payload)
