@@ -1,4 +1,6 @@
 use clap::Parser;
+use log::{error, info};
+use hmacauth_lib::utils::get_request_header;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -20,6 +22,23 @@ struct Args {
 async fn main() {
     pretty_env_logger::init();
     let args = Args::parse();
+    let result = get_request_header(
+        &args.url.parse().unwrap(),
+        "POST",
+        &args.request_id,
+        &args.message,
+        &args.access_key,
+    );
+    match result {
+        Ok(header) => {
+            header.iter().for_each(|(key, value)| {
+                info!("{}: {}", key, value);
+            });
+        }
+        Err(e) => {
+            error!("{}", e);
+        }
+    }
 
-    println!("Hello, world!");
+    //println!("Hello, world!");
 }
