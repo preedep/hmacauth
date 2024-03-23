@@ -2,5 +2,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Payload {
-    pub message: String,
+    #[serde(rename = "message")]
+    pub message: Option<String>,
 }

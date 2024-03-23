@@ -1,8 +1,23 @@
-use actix_web::{App, HttpRequest, HttpServer};
+use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
 use log::info;
 use actix_files as fs;
 use actix_files::NamedFile;
 use actix_web::middleware::Logger;
+use hmacauth_lib::{models, utils};
+
+
+async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) -> HttpResponse {
+    let headers = req.headers();
+    let header_maps = headers.iter().map(|(key, value)| {
+        (key.to_string(), value.to_str().unwrap().to_string())
+    }).collect::<Vec<(String, String)>>();
+    info!("Received headers: {:#?}", header_maps);
+    let signed_header = utils::get_signed_header(&header_maps);
+    info!("Received signed header: {:#?}", signed_header);
+    let payload = payload.into_inner();
+    info!("Received payload: {:#?}", payload);
+    HttpResponse::Ok().json(payload)
+}
 
 async fn index(_req: HttpRequest) -> actix_web::Result<NamedFile> {
     Ok(NamedFile::open("./statics/index.html")?)
@@ -16,6 +31,7 @@ async fn main() -> std::io::Result<()> {
                         App::new()
                             .wrap(Logger::default())
                             .route("/", actix_web::web::get().to(index))
+                            .route("/apis/v1/payload", web::post().to(payload_handler))
     )
         .bind(("0.0.0.0", 8080))?
         .run()
