@@ -53,4 +53,5 @@ mod tests {
         let result = utils::compute_signature(&string_to_sign, &access_key);
         assert_eq!(result, "HyXBLCEqeI6AfpCUvWsbH1lX9hTAF7u6XwSAicsWiVs=");
     }
+
 }

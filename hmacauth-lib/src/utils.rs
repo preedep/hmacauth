@@ -6,8 +6,19 @@ use hmac::{Hmac, Mac};
 use httpdate::fmt_http_date;
 use log::debug;
 use reqwest::header::HeaderMap;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use url::Url;
+
+
+
+#[derive(Debug,Serialize,Deserialize)]
+pub struct HMACAuthSignedHeader {
+    pub params : Vec<String>,
+    pub signature : String,
+}
+
+pub type HMACAuthSignedHeaderResult = Result<HMACAuthSignedHeader, String>;
 
 type HmacSha256 = Hmac<Sha256>;
 
@@ -92,4 +103,32 @@ pub fn generate_signature(url_endpoint: &Url,
         compute_hash.clone(),
     );
     (compute_hash, string_to_sign)
+}
+
+pub fn get_signed_header(header: &HeaderMap) -> HMACAuthSignedHeaderResult {
+    for (key, value) in header.iter() {
+        if key == "Authorization" {
+            let value = value.to_str().unwrap();
+            if !value.starts_with("HMAC-SHA256") {
+                return Err("Authorization header is not HMAC-SHA256".to_string());
+            }
+            let mut signed_value = HMACAuthSignedHeader {
+                params: Vec::new(),
+                signature: "".to_string(),
+            };
+            let signed_header_value = value.replace("HMAC-SHA256 SignedHeaders=","");
+            let mut iter = signed_header_value.split(";");
+            while let Some(param) = iter.next() {
+                if param.starts_with("x-ms-content-sha256") {
+                    signed_value.params.push("x-ms-content-sha256".to_string());
+                    let signature = param.replace("x-ms-content-sha256&Signature=","");
+                    signed_value.signature = signature.to_string();
+                }else{
+                    signed_value.params.push(param.to_string());
+                }
+            }
+            return Ok(signed_value);
+        }
+    }
+    return Err("Authorization header is not found".to_string());
 }
