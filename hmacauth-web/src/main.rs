@@ -19,6 +19,7 @@ fn get_full_url(req: &HttpRequest) -> String {
 
     full_url
 }
+
 async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) -> HttpResponse {
     let headers = req.headers();
     let header_maps = headers.iter().map(|(key, value)| {
@@ -36,11 +37,11 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
     let payload_str = serde_json::to_string(&payload).unwrap();
     let request_url = url::Url::parse(get_full_url(&req).as_str()).unwrap();
     debug!("request_url : {}\r\n", request_url);
-    let (compute_hash,string_to_sign) = utils::generate_string_to_sign(
-                                  &request_url,
-                                   req.method().as_str(),
-                                   &headers.get("x-ms-date").unwrap().to_str().unwrap().to_string(),
-                                    &payload_str
+    let (compute_hash, string_to_sign) = utils::generate_string_to_sign(
+        &request_url,
+        req.method().as_str(),
+        &headers.get("x-ms-date").unwrap().to_str().unwrap().to_string(),
+        &payload_str,
     );
     debug!("compute_hash : {}\r\n", compute_hash);
     debug!("string_to_sign : {}\r\n", string_to_sign);
@@ -61,19 +62,19 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
 async fn index(_req: HttpRequest) -> actix_web::Result<NamedFile> {
     Ok(NamedFile::open("./static/index.html")?)
 }
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     pretty_env_logger::init();
     info!("Starting server at http://:8080");
 
     HttpServer::new(move ||
-                        App::new()
-                            .wrap(Logger::default())
-                            .service(fs::Files::new("/static", "./static"))
-                            .route("/", actix_web::web::get().to(index))
-                            .route("/apis/v1/payload", web::post().to(payload_handler)
-
-                            )
+        App::new()
+            .wrap(Logger::default())
+            .service(fs::Files::new("/static", "./static"))
+            .route("/", actix_web::web::get().to(index))
+            .route("/apis/v1/payload", web::post().to(payload_handler),
+            )
     )
         .bind(("0.0.0.0", 8080))?
         .run()
