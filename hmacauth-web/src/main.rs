@@ -1,10 +1,10 @@
-use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
-use log::{error, info};
 use actix_files as fs;
 use actix_files::NamedFile;
+use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
 use actix_web::middleware::Logger;
-use hmacauth_lib::{models, utils};
+use log::{error, info};
 
+use hmacauth_lib::{models, utils};
 
 async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) -> HttpResponse {
     let headers = req.headers();

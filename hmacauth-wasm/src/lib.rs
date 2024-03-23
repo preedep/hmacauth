@@ -1,4 +1,3 @@
-
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
@@ -46,8 +45,6 @@ pub fn http_post_payload(url: String,
 }
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn it_works() {
         //let result = add(2, 2);

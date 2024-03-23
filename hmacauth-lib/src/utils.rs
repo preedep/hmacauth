@@ -6,12 +6,9 @@ use base64::{Engine as _, engine::general_purpose};
 use hmac::{Hmac, Mac};
 use httpdate::fmt_http_date;
 use log::debug;
-
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use url::Url;
-
-
 
 #[derive(Debug,Serialize,Deserialize)]
 pub struct HMACAuthSignedHeader {
