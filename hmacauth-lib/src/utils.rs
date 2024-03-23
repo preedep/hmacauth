@@ -78,7 +78,11 @@ pub fn generate_signature(url_endpoint: &Url,
     //let http_date = fmt_http_date(now);
 
     let host_authority = format!("{}", url_endpoint.host().unwrap(), );
-    let path_and_query = format!("{}?{}", url_endpoint.path(), url_endpoint.query().unwrap());
+    let path_and_query = match url_endpoint.query() {
+        Some(query) => format!("{}?{}", url_endpoint.path(), query),
+        None => format!("{}", url_endpoint.path()),
+    };
+    //let path_and_query = format!("{}?{}", url_endpoint.path(), url_endpoint.query().unwrap());
     let string_to_sign = format!(
         "{}\n{}\n{};{};{}",
         http_method,
