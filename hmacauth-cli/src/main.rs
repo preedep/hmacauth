@@ -24,11 +24,17 @@ struct Args {
 async fn main() {
     pretty_env_logger::init();
     let args = Args::parse();
+
+    let payload = Payload {
+        message: Some(args.message.clone()),
+    };
+    let payload_str = serde_json::to_string(&payload).unwrap();
+
     let result = get_request_header(
         &args.url.parse().unwrap(),
         "POST",
         &args.request_id,
-        &args.message,
+        &payload_str,
         &args.access_key,
     );
     let mut header_map = HeaderMap::new();
