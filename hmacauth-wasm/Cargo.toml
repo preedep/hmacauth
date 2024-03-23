@@ -6,10 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 crate-type = ["cdylib", "rlib"]
-
+#crate-type = ["staticlib"]
 
 [dependencies]
-hmacauth-lib = { path = "../hmacauth-lib" }
+hmacauth-lib = { path = "../hmacauth-lib"}
 
 reqwest = { version = "0.12" , features = ["json","rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
