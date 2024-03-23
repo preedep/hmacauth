@@ -1,0 +1,20 @@
+[package]
+name = "hmacauth-lib"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["staticlib","cdylib", "rlib"]
+#crate-type = ["staticlib"]
+
+[dependencies]
+base64 = "0.22"
+hmac = "0.12"
+httpdate = "1.0"
+log = "0.4"
+#reqwest = "0.12"
+sha2 = "0.10"
+url = "2.5"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0"
