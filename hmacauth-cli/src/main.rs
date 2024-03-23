@@ -1,6 +1,7 @@
 use clap::Parser;
 use log::{error, info};
 use reqwest::header::HeaderMap;
+
 use hmacauth_lib::models::Payload;
 use hmacauth_lib::utils::get_request_header;
 
@@ -20,6 +21,7 @@ struct Args {
     #[arg(short, long)]
     access_key: String,
 }
+
 #[tokio::main]
 async fn main() {
     pretty_env_logger::init();
@@ -52,11 +54,11 @@ async fn main() {
         }
     }
 
-    let result  = reqwest::Client::new().post(&args.url)
+    let result = reqwest::Client::new().post(&args.url)
         .headers(header_map)
         .json(&Payload {
             message: Some(args.message.clone()),
-            }
+        }
         )
         .send().await;
 

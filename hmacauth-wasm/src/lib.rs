@@ -5,14 +5,14 @@ use web_sys::console;
 pub fn string_example(s: String) -> String {
     format!("Hello {}", s)
 }
+
 #[wasm_bindgen]
 pub fn http_post_payload(url: String,
                          request_id: String,
                          message: String,
                          access_key: String,
-                         f_callback: &js_sys::Function
-                        ) -> String {
-
+                         f_callback: &js_sys::Function,
+) -> String {
     let result = format!("Hello, {}", message);
 
     let payload = hmacauth_lib::models::Payload {
@@ -43,6 +43,7 @@ pub fn http_post_payload(url: String,
     }
     result
 }
+
 #[cfg(test)]
 mod tests {
     #[test]

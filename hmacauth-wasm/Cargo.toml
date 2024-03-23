@@ -9,9 +9,9 @@ crate-type = ["cdylib", "rlib"]
 #crate-type = ["staticlib"]
 
 [dependencies]
-hmacauth-lib = { path = "../hmacauth-lib"}
+hmacauth-lib = { path = "../hmacauth-lib" }
 
-reqwest = { version = "0.12" , features = ["json","rustls-tls"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 wasm-bindgen = "0.2"

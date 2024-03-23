@@ -1,18 +1,18 @@
 <body>
 <script type="module">
- import * as wasm from "./static/pkg/hmacauth_wasm.js";
+    import * as wasm from "./static/pkg/hmacauth_wasm.js";
 
- wasm.default().then((module) => {
-  wasm.string_example("Jane");
-  wasm.http_post_payload("http://localhost:8080/apis/v1/payload", "request_123456", "Hello World", "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=",myCallback);
- });
+    wasm.default().then((module) => {
+        wasm.string_example("Jane");
+        wasm.http_post_payload("http://localhost:8080/apis/v1/payload", "request_123456", "Hello World", "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=", myCallback);
+    });
 
- function myCallback(result) {
-  console.log(`Callback received result: ${result}`);
- }
+    function myCallback(result) {
+        console.log(`Callback received result: ${result}`);
+    }
 </script>
 
- <h1>Hello World</h1>
- <div id="output"></div>
+<h1>Hello World</h1>
+<div id="output"></div>
 
 </body>

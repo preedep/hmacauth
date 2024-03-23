@@ -10,10 +10,10 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use url::Url;
 
-#[derive(Debug,Serialize,Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct HMACAuthSignedHeader {
-    pub params : Vec<String>,
-    pub signature : String,
+    pub params: Vec<String>,
+    pub signature: String,
 }
 
 pub type HMACAuthSignedHeaderResult = Result<HMACAuthSignedHeader, String>;
@@ -49,15 +49,15 @@ pub fn get_request_header(
     request_id: &String,
     json_payload: &String,
     access_key: &String,
-) -> Result<HashMap<String,String>, String> {
+) -> Result<HashMap<String, String>, String> {
     let mut header = HashMap::new();
 
     let now = SystemTime::now();
     let http_date = fmt_http_date(now);
-    let (compute_hash,string_to_sign) = generate_string_to_sign(url_endpoint,
-                                                                       http_method,
-                                                                       &http_date,
-                                                                       json_payload);
+    let (compute_hash, string_to_sign) = generate_string_to_sign(url_endpoint,
+                                                                 http_method,
+                                                                 &http_date,
+                                                                 json_payload);
     debug!("{}\r\n", string_to_sign);
 
     header.insert("Content-Type".to_string(), "application/json".parse().unwrap());
@@ -78,9 +78,9 @@ pub fn get_request_header(
 }
 
 pub fn generate_string_to_sign(url_endpoint: &Url,
-                      http_method: &str,
-                      http_date: &String,
-                      json_payload: &String) -> (String, String) {
+                               http_method: &str,
+                               http_date: &String,
+                               json_payload: &String) -> (String, String) {
     let compute_hash = compute_content_sha256(json_payload);
 
     //let now = SystemTime::now();
@@ -103,7 +103,7 @@ pub fn generate_string_to_sign(url_endpoint: &Url,
     (compute_hash, string_to_sign)
 }
 
-pub fn get_signed_header(header: &Vec<(String,String)>) -> HMACAuthSignedHeaderResult {
+pub fn get_signed_header(header: &Vec<(String, String)>) -> HMACAuthSignedHeaderResult {
     for (key, value) in header.iter() {
         if key.to_lowercase().eq("authorization") {
             let value = value;
@@ -114,14 +114,14 @@ pub fn get_signed_header(header: &Vec<(String,String)>) -> HMACAuthSignedHeaderR
                 params: Vec::new(),
                 signature: "".to_string(),
             };
-            let signed_header_value = value.replace("HMAC-SHA256 SignedHeaders=","");
+            let signed_header_value = value.replace("HMAC-SHA256 SignedHeaders=", "");
             let mut iter = signed_header_value.split(";");
             while let Some(param) = iter.next() {
                 if param.starts_with("x-ms-content-sha256") {
                     signed_value.params.push("x-ms-content-sha256".to_string());
-                    let signature = param.replace("x-ms-content-sha256&Signature=","");
+                    let signature = param.replace("x-ms-content-sha256&Signature=", "");
                     signed_value.signature = signature.to_string();
-                }else{
+                } else {
                     signed_value.params.push(param.to_string());
                 }
             }
