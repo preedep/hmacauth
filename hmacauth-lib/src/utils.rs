@@ -105,7 +105,7 @@ pub fn generate_signature(url_endpoint: &Url,
 
 pub fn get_signed_header(header: &Vec<(String,String)>) -> HMACAuthSignedHeaderResult {
     for (key, value) in header.iter() {
-        if key == "Authorization" {
+        if key.to_lowercase().eq("authorization") {
             let value = value;
             if !value.starts_with("HMAC-SHA256") {
                 return Err("Authorization header is not HMAC-SHA256".to_string());
