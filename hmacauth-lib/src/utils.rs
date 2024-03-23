@@ -54,7 +54,7 @@ pub fn get_request_header(
 
     let now = SystemTime::now();
     let http_date = fmt_http_date(now);
-    let (compute_hash,string_to_sign) = generate_signature(url_endpoint,
+    let (compute_hash,string_to_sign) = generate_string_to_sign(url_endpoint,
                                                                        http_method,
                                                                        &http_date,
                                                                        json_payload);
@@ -77,7 +77,7 @@ pub fn get_request_header(
     Ok(header)
 }
 
-pub fn generate_signature(url_endpoint: &Url,
+pub fn generate_string_to_sign(url_endpoint: &Url,
                       http_method: &str,
                       http_date: &String,
                       json_payload: &String) -> (String, String) {

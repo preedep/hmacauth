@@ -2,7 +2,7 @@ use actix_files as fs;
 use actix_files::NamedFile;
 use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
 use actix_web::middleware::Logger;
-use log::{error, info};
+use log::{debug, error, info};
 
 use hmacauth_lib::{models, utils};
 
@@ -11,6 +11,7 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
     let header_maps = headers.iter().map(|(key, value)| {
         (key.to_string(), value.to_str().unwrap().to_string())
     }).collect::<Vec<(String, String)>>();
+
     info!("Received headers: {:#?}", header_maps);
     let signed_header = utils::get_signed_header(&header_maps);
     info!("Received signed header: {:#?}", signed_header);
@@ -18,6 +19,9 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
         error!("Unauthorized");
         return HttpResponse::Unauthorized().body("Unauthorized");
     }
+
+    debug!("uri: {}", req.uri());
+
     let payload = payload.into_inner();
     info!("Received payload: {:#?}", payload);
     HttpResponse::Ok().json(payload)
