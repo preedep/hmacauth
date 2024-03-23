@@ -24,7 +24,7 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
 }
 
 async fn index(_req: HttpRequest) -> actix_web::Result<NamedFile> {
-    Ok(NamedFile::open("./statics/index.html")?)
+    Ok(NamedFile::open("./static/index.html")?)
 }
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -34,8 +34,11 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move ||
                         App::new()
                             .wrap(Logger::default())
+                            .service(fs::Files::new("/static", "./static"))
                             .route("/", actix_web::web::get().to(index))
-                            .route("/apis/v1/payload", web::post().to(payload_handler))
+                            .route("/apis/v1/payload", web::post().to(payload_handler)
+
+                            )
     )
         .bind(("0.0.0.0", 8080))?
         .run()
