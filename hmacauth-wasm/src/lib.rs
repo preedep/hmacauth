@@ -1,5 +1,9 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub fn string_example(s: String) -> String {
+    format!("Hello {}", s)
 }
 
 #[cfg(test)]
@@ -8,7 +12,7 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        //let result = add(2, 2);
+        //assert_eq!(result, 4);
     }
 }
