@@ -3,11 +3,13 @@
  import * as wasm from "./static/pkg/hmacauth_wasm.js";
 
  wasm.default().then((module) => {
-  console.log(wasm.string_example("Jane"));
-  wasm.http_post_payload("http://localhost:8080/apis/v1/payload", "request_123456", "Hello World", "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=", function (msg) {
-     document.getElementById("output").innerHTML = msg;
-  });
+  wasm.string_example("Jane");
+  wasm.http_post_payload("http://localhost:8080/apis/v1/payload", "request_123456", "Hello World", "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=");
  });
+
+ function myCallback(result) {
+  console.log(`Callback received result: ${result}`);
+ }
 </script>
 
  <h1>Hello World</h1>
