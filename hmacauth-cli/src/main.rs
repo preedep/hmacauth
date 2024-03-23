@@ -1,5 +1,7 @@
 use clap::Parser;
 use log::{error, info};
+use reqwest::header::HeaderMap;
+use hmacauth_lib::models::Payload;
 use hmacauth_lib::utils::get_request_header;
 
 #[derive(Parser, Debug)]
@@ -29,16 +31,41 @@ async fn main() {
         &args.message,
         &args.access_key,
     );
+    let mut header_map = HeaderMap::new();
+
     match result {
         Ok(header) => {
             header.iter().for_each(|(key, value)| {
                 info!("{}: {}", key, value);
             });
+            header_map = (&header).try_into().expect("valid headers");
         }
         Err(e) => {
-            error!("{}", e);
+            //error!("{}", e);
+            panic!("{}", e);
         }
     }
 
+    let result  = reqwest::Client::new().post(&args.url)
+        .headers(header_map)
+        .json(&Payload {
+            message: Some(args.message.clone()),
+            }
+        )
+        .send().await;
+
+    match result {
+        Ok(response) => {
+            if response.status().is_success() {
+                info!("Success: {}", response.status());
+            } else {
+                error!("Error: {}", response.status());
+            }
+            info!("Response: {:?}", response);
+        }
+        Err(e) => {
+            panic!("{}", e);
+        }
+    }
     //println!("Hello, world!");
 }
