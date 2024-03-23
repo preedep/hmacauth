@@ -1,3 +1,14 @@
 <body>
+<script type="module">
+ import * as wasm from "./static/pkg/hmacauth_wasm.js";
+
+ wasm.default().then((module) => {
+
+  wasm.string_example("Jane");
+
+ });
+
+</script>
+
  <h1>Hello World</h1>
 </body>
