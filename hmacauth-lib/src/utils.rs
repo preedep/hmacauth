@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::str::Split;
 use std::time::SystemTime;
 
@@ -5,7 +6,7 @@ use base64::{Engine as _, engine::general_purpose};
 use hmac::{Hmac, Mac};
 use httpdate::fmt_http_date;
 use log::debug;
-use reqwest::header::HeaderMap;
+
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use url::Url;
@@ -51,8 +52,8 @@ pub fn get_request_header(
     request_id: &String,
     json_payload: &String,
     access_key: &String,
-) -> Result<HeaderMap, String> {
-    let mut header = HeaderMap::new();
+) -> Result<HashMap<String,String>, String> {
+    let mut header = HashMap::new();
 
     let now = SystemTime::now();
     let http_date = fmt_http_date(now);
@@ -62,17 +63,17 @@ pub fn get_request_header(
                                                                        json_payload);
     debug!("{}\r\n", string_to_sign);
 
-    header.insert("Content-Type", "application/json".parse().unwrap());
-    header.insert("repeatability-request-id", request_id.parse().unwrap());
-    header.insert("repeatability-first-sent", http_date.parse().unwrap());
-    header.insert("x-ms-date", http_date.clone().parse().unwrap());
-    header.insert("x-ms-content-sha256", compute_hash.parse().unwrap());
+    header.insert("Content-Type".to_string(), "application/json".parse().unwrap());
+    header.insert("repeatability-request-id".to_string(), request_id.parse().unwrap());
+    header.insert("repeatability-first-sent".to_string(), http_date.parse().unwrap());
+    header.insert("x-ms-date".to_string(), http_date.clone().parse().unwrap());
+    header.insert("x-ms-content-sha256".to_string(), compute_hash.parse().unwrap());
 
     let authorization = format!(
         "HMAC-SHA256 SignedHeaders=x-ms-date;host;x-ms-content-sha256&Signature={}",
         compute_signature(&string_to_sign.to_string(), &access_key.to_string())
     );
-    header.insert("Authorization", authorization.parse().unwrap());
+    header.insert("Authorization".to_string(), authorization.parse().unwrap());
 
     debug!("{:#?}", header);
 

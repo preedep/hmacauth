@@ -13,7 +13,7 @@ base64 = "0.22"
 hmac = "0.12"
 httpdate = "1.0"
 log = "0.4"
-reqwest = "0.12"
+#reqwest = "0.12"
 sha2 = "0.10"
 url = "2.5"
 serde = { version = "1", features = ["derive"] }

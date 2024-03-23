@@ -31,7 +31,7 @@ pub fn http_post_payload(url: String,
             console::log_1(&JsValue::from_str("Print headers:"));
             header.iter().for_each(|(key, value)| {
                 //print to javascript console
-                let result = format!("{}: {}", key, value.to_str().unwrap());
+                let result = format!("{}: {}", key, value);
                 console::log_1(&JsValue::from_str(&result));
 
                 //call back to javascript
