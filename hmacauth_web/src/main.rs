@@ -65,7 +65,9 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
 }
 
 async fn index(_req: HttpRequest) -> actix_web::Result<NamedFile> {
-    Ok(NamedFile::open("./static/index.html")?)
+    let static_folder = env::var("STATIC_FOLDER").unwrap_or_else(|_| "./static".to_string());
+    let index_html = format!("{}/index.html", static_folder);
+    Ok(NamedFile::open(index_html)?)
 }
 
 #[actix_web::main]
