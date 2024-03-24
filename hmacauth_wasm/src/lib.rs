@@ -36,6 +36,7 @@ pub fn http_post_payload(url: String,
 
     });
      */
+    console::log_1(&JsValue::from_str("call http_post_payload"));
 
     let closure = Closure::wrap(Box::new(move |url: String,
                                                                     method:String,
