@@ -1,6 +1,6 @@
 cd ..
-cd hmacauth-wasm
+cd hmacauth_wasm
 ./build.sh
 cd ..
-cd hmacauth-web
+cd hmacauth_web
 RUST_LOG=debug cargo run

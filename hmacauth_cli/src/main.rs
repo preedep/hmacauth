@@ -70,7 +70,7 @@ async fn main() {
             } else {
                 error!("Error: {}", response.status());
             }
-            info!("Response: {:?}", response);
+            info!("Response: {:#?}", response);
         }
         Err(e) => {
             panic!("{}", e);
