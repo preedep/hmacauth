@@ -18,11 +18,12 @@ pub fn http_post_payload(url: String,
     let payload = hmacauth_lib::models::Payload {
         message: Some(message.clone()),
     };
+    let payload_str = serde_json::to_string(&payload).unwrap();
     let headers = hmacauth_lib::utils::get_request_header(
         &url.parse().unwrap(),
         "POST",
         &request_id,
-        &message,
+        &payload_str,
         &access_key,
     );
     match headers {
