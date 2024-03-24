@@ -2,6 +2,7 @@ use clap::Parser;
 use log::{error, info};
 use reqwest::header::HeaderMap;
 
+
 use hmacauth_lib::models::Payload;
 use hmacauth_lib::utils::get_request_header;
 

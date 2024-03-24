@@ -1,5 +1,5 @@
 [package]
-name = "hmacauth-lib"
+name = "hmacauth_lib"
 version = "0.1.0"
 edition = "2021"
 
