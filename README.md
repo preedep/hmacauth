@@ -39,12 +39,16 @@ Example run HMACAUTH-WEB: (API endpoint and Static Web/Web Assembly hosting)
 cd hmacauth_wasm
 ./build.sh
 cd ..
+STATIC_FOLDER=/Users/preedee/Project/Rust/hmacauth/hmacauth_web/static \ 
 RUST_LOG=debug ./target/debug/hmacauth_web
 ```
 
+After running HMACAUTH-WEB, you can access simple web at http://localhost:8080/
+
+
 ## HMACAUTH-WASM
 
-The HMACAUTH-WASM is a Simple WebAssembly project that uses the HMACAUTH-LIB to authenticate a request. It provides a way to authenticate a request using HMAC Authentication in the browser. This project is hosted on HMACAUTH-WEB but not yet implemented.
+The HMACAUTH-WASM is a Simple WebAssembly project that uses the HMACAUTH-LIB to authenticate a request. It provides a way to authenticate a request using HMAC Authentication in the browser. This project is hosted on HMACAUTH-WEB **_but not yet implemented._** 
 
 ## HMACAUTH-CLI
 The HMACAUTH-CLI is a Simple CLI project that uses the HMACAUTH-LIB to authenticate a request. It provides a way to authenticate a request using HMAC Authentication in the terminal.
