@@ -11,7 +11,7 @@ pub fn http_post_payload(url: String,
                          request_id: String,
                          message: String,
                          access_key: String,
-                         f_callback: &js_sys::Function,
+                         _f_callback: &js_sys::Function,
 ) -> String {
     let result = format!("Hello, {}", message);
 
@@ -28,7 +28,7 @@ pub fn http_post_payload(url: String,
     console::log_1(&JsValue::from_str(&format!("message: {}", message)));
     console::log_1(&JsValue::from_str(&format!("access key {}", access_key)));
 
-    let headers = get_request_header(
+    let _headers = get_request_header(
         &url.parse().unwrap(),
         &method,
         &request_id,

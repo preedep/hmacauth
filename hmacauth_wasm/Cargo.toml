@@ -8,6 +8,10 @@ build = "build.rs"
 crate-type = ["cdylib", "rlib"]
 
 
+[[build]]
+target = "wasm32-unknown-unknown"
+
+
 [dependencies]
 hmacauth_lib = { path = "../hmacauth_lib" }
 
