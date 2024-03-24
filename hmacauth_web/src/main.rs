@@ -37,10 +37,14 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
     let payload_str = serde_json::to_string(&payload).unwrap();
     let request_url = url::Url::parse(get_full_url(&req).as_str()).unwrap();
     debug!("request_url : {}", request_url);
+    let x_ms_date = headers.get("x-ms-date").unwrap().to_str().unwrap().to_string();
+
+    let params = vec![&x_ms_date];
+
     let (compute_hash, string_to_sign) = utils::generate_string_to_sign(
         &request_url,
-        req.method().as_str(),
-        &headers.get("x-ms-date").unwrap().to_str().unwrap().to_string(),
+        &req.method().to_string(),
+        &params,
         &payload_str,
     );
     debug!("compute_hash : {}", compute_hash);

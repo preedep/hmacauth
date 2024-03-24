@@ -33,10 +33,11 @@ async fn main() {
         message: Some(args.message.clone()),
     };
     let payload_str = serde_json::to_string(&payload).unwrap();
+    let method = "POST".to_string();
 
     let result = get_request_header(
         &args.url.parse().unwrap(),
-        "POST",
+        &method,
         &args.request_id,
         &payload_str,
         &args.access_key,

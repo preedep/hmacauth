@@ -44,7 +44,7 @@ pub fn compute_signature(string_to_signed: &String, secret: &String) -> String {
 
 pub fn get_request_header(
     url_endpoint: &Url,
-    http_method: &str,
+    http_method: &String,
     request_id: &String,
     json_payload: &String,
     access_key: &String,
@@ -53,9 +53,12 @@ pub fn get_request_header(
 
     let now = SystemTime::now();
     let http_date = fmt_http_date(now);
-    let (compute_hash, string_to_sign) = generate_string_to_sign(url_endpoint,
+    let params = vec![&http_date];
+
+    let (compute_hash, string_to_sign) = generate_string_to_sign(
+                                                                 url_endpoint,
                                                                  http_method,
-                                                                 &http_date,
+                                                                 &params,
                                                                  json_payload);
     debug!("{}\r\n", string_to_sign);
 
@@ -77,8 +80,9 @@ pub fn get_request_header(
 }
 
 pub fn generate_string_to_sign(url_endpoint: &Url,
-                               http_method: &str,
-                               http_date: &String,
+                               http_method: &String,
+                               /*http_date: &String,*/
+                               params: &Vec<&String>,
                                json_payload: &String) -> (String, String) {
     let compute_hash = compute_content_sha256(json_payload);
 
@@ -90,12 +94,14 @@ pub fn generate_string_to_sign(url_endpoint: &Url,
         Some(query) => format!("{}?{}", url_endpoint.path(), query),
         None => format!("{}", url_endpoint.path()),
     };
+    let params = params.iter().map(|x| x.to_string()).collect::<Vec<String>>().join("\n");
+
     //let path_and_query = format!("{}?{}", url_endpoint.path(), url_endpoint.query().unwrap());
     let string_to_sign = format!(
         "{}\n{}\n{};{};{}",
         http_method,
         path_and_query,
-        http_date.clone(),
+        params,
         host_authority,
         compute_hash.clone(),
     );
