@@ -95,7 +95,7 @@ pub fn generate_string_to_sign(url_endpoint: &Url,
         None => format!("{}", url_endpoint.path()),
     };
     let params = params.iter().map(|x| x.to_string()).collect::<Vec<String>>().join("\n");
-
+    debug!("params for : generate_string_to_sign {}", params);
     //let path_and_query = format!("{}?{}", url_endpoint.path(), url_endpoint.query().unwrap());
     let string_to_sign = format!(
         "{}\n{}\n{};{};{}",
