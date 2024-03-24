@@ -35,6 +35,9 @@ Example run HMACAUTH-WEB: (Just API endpoint)
 RUST_LOG=debug ./target/debug/hmacauth_web
 ```
 Example run HMACAUTH-WEB: (API endpoint and Static Web/Web Assembly hosting)
+
+you can define the static folder path by setting the STATIC_FOLDER environment variable.
+
 ```bash
 cd hmacauth_wasm
 ./build.sh
