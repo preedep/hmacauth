@@ -7,7 +7,7 @@ build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hmacauth_lib = {path = "../hmacauth_lib" }
+hmacauth_lib = { path = "../hmacauth_lib" }
 
 tokio = { version = "1", features = ["full"] }
 log = "0.4"

@@ -56,10 +56,10 @@ pub fn get_request_header(
     let params = vec![&http_date];
 
     let (compute_hash, string_to_sign) = generate_string_to_sign(
-                                                                 url_endpoint,
-                                                                 http_method,
-                                                                 &params,
-                                                                 json_payload);
+        url_endpoint,
+        http_method,
+        &params,
+        json_payload);
     debug!("{}\r\n", string_to_sign);
 
     header.insert("Content-Type".to_string(), "application/json".parse().unwrap());
