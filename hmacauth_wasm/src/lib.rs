@@ -1,10 +1,9 @@
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
-#[wasm_bindgen]
-pub fn string_example(s: String) -> String {
-    format!("Hello {}", s)
-}
+
+use hmacauth_lib::models::Payload;
+use hmacauth_lib::utils::get_request_header;
 
 #[wasm_bindgen]
 pub fn http_post_payload(url: String,
@@ -15,14 +14,17 @@ pub fn http_post_payload(url: String,
 ) -> String {
     let result = format!("Hello, {}", message);
 
-    let payload = hmacauth_lib::models::Payload {
+    let payload = Payload {
         message: Some(message.clone()),
     };
-    let headers = hmacauth_lib::utils::get_request_header(
+    let payload_str = serde_json::to_string(&payload).unwrap();
+    let method = "POST".to_string();
+
+    let headers = get_request_header(
         &url.parse().unwrap(),
-        "POST",
+        &method,
         &request_id,
-        &message,
+        &payload_str,
         &access_key,
     );
     match headers {

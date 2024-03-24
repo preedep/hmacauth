@@ -1,6 +1,8 @@
+use std::time::Instant;
 use clap::Parser;
 use log::{error, info};
 use reqwest::header::HeaderMap;
+
 
 use hmacauth_lib::models::Payload;
 use hmacauth_lib::utils::get_request_header;
@@ -31,10 +33,11 @@ async fn main() {
         message: Some(args.message.clone()),
     };
     let payload_str = serde_json::to_string(&payload).unwrap();
+    let method = "POST".to_string();
 
     let result = get_request_header(
         &args.url.parse().unwrap(),
-        "POST",
+        &method,
         &args.request_id,
         &payload_str,
         &args.access_key,
@@ -54,6 +57,7 @@ async fn main() {
         }
     }
 
+    let start = Instant::now();
     let result = reqwest::Client::new().post(&args.url)
         .headers(header_map)
         .json(&Payload {
@@ -62,14 +66,17 @@ async fn main() {
         )
         .send().await;
 
+    // Calculate elapsed time
+    let elapsed = start.elapsed();
+
     match result {
         Ok(response) => {
             if response.status().is_success() {
-                info!("Success: {}", response.status());
+                info!("Success: {} with Execution time: {:.2?}", response.status(),elapsed);
             } else {
-                error!("Error: {}", response.status());
+                error!("Error: {} with Execution time: {:.2?}", response.status(),elapsed);
             }
-            info!("Response: {:?}", response);
+            info!("Response: {:#?}", response);
         }
         Err(e) => {
             panic!("{}", e);

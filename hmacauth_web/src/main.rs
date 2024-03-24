@@ -36,18 +36,22 @@ async fn payload_handler(req: HttpRequest, payload: web::Json<models::Payload>) 
 
     let payload_str = serde_json::to_string(&payload).unwrap();
     let request_url = url::Url::parse(get_full_url(&req).as_str()).unwrap();
-    debug!("request_url : {}\r\n", request_url);
+    debug!("request_url : {}", request_url);
+    let x_ms_date = headers.get("x-ms-date").unwrap().to_str().unwrap().to_string();
+
+    let params = vec![&x_ms_date];
+
     let (compute_hash, string_to_sign) = utils::generate_string_to_sign(
         &request_url,
-        req.method().as_str(),
-        &headers.get("x-ms-date").unwrap().to_str().unwrap().to_string(),
+        &req.method().to_string(),
+        &params,
         &payload_str,
     );
-    debug!("compute_hash : {}\r\n", compute_hash);
-    debug!("string_to_sign : {}\r\n", string_to_sign);
+    debug!("compute_hash : {}", compute_hash);
+    debug!("string_to_sign : {}", string_to_sign);
 
     let signature = utils::compute_signature(&string_to_sign, &"IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=".to_string());
-    debug!("signature : {}\r\n", signature);
+    debug!("signature : {}", signature);
 
     if signature.eq(&signed_header.unwrap().signature) {
         let payload = payload.into_inner();

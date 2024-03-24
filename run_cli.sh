@@ -1,1 +1,1 @@
-RUST_LOG=debug ./target/debug/hmacauth-cli --url "http://localhost:8080/apis/v1/payload" --request-id "request_id_123456" --message "Hello World" --access-key "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ="
+RUST_LOG=debug ./target/debug/hmacauth_cli --url "http://localhost:8080/apis/v1/payload" --request-id "request_id_123456" --message "Hello World" --access-key "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ="
