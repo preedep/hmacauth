@@ -1,3 +1,4 @@
+use std::env;
 use actix_files as fs;
 use actix_files::NamedFile;
 use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
@@ -72,10 +73,12 @@ async fn main() -> std::io::Result<()> {
     pretty_env_logger::init();
     info!("Starting server at http://:8080");
 
+    let static_folder = env::var("STATIC_FOLDER").unwrap_or_else(|_| "./static".to_string());
+
     HttpServer::new(move ||
         App::new()
             .wrap(Logger::default())
-            .service(fs::Files::new("/static", "./static"))
+            .service(fs::Files::new("/static", &static_folder))
             .route("/", actix_web::web::get().to(index))
             .route("/apis/v1/payload", web::post().to(payload_handler),
             )
