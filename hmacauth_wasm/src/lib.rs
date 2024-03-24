@@ -20,29 +20,45 @@ pub fn http_post_payload(url: String,
     let payload_str = serde_json::to_string(&payload).unwrap();
     let method = "POST".to_string();
 
-    let headers = get_request_header(
-        &url.parse().unwrap(),
-        &method,
-        &request_id,
-        &payload_str,
-        &access_key,
-    );
-    match headers {
-        Ok(header) => {
-            console::log_1(&JsValue::from_str("Print headers:"));
-            header.iter().for_each(|(key, value)| {
-                //print to javascript console
-                let result = format!("{}: {}", key, value);
-                console::log_1(&JsValue::from_str(&result));
+    let closure = Closure::wrap(Box::new(move |url: String,
+                                                                    method:String,
+                                                                    request_id:String,
+                                                                    message: String,
+                                                                    access_key: String,
+                                                                    payload_str: String| {
 
-                //call back to javascript
-                f_callback.call1(&JsValue::NULL, &JsValue::from_str(&result)).unwrap();
-            });
+        console::log_1(&JsValue::from_str(&format!("url: {}", url)));
+        console::log_1(&JsValue::from_str(&format!("method: {}", method)));
+        console::log_1(&JsValue::from_str(&format!("request_id: {}", request_id)));
+        console::log_1(&JsValue::from_str(&format!("message: {}", message)));
+        console::log_1(&JsValue::from_str(&format!("access key {}", access_key)));
+
+        let headers = get_request_header(
+            &url.parse().unwrap(),
+            &method,
+            &request_id,
+            &payload_str,
+            &access_key,
+        );
+
+        match headers {
+            Ok(header) => {
+                console::log_1(&JsValue::from_str("Print headers:"));
+                header.iter().for_each(|(key, value)| {
+                    //print to javascript console
+                    let result = format!("{}: {}", key, value);
+                    console::log_1(&JsValue::from_str(&result));
+                });
+            }
+            Err(e) => {
+                console::log_1(&JsValue::from_str(&format!("Error: {}", e)));
+            }
         }
-        Err(e) => {
-            return e;
-        }
-    }
+
+    }) as Box<dyn FnMut(String,String,String,String,String,String)>);
+
+    closure.forget();
+
     result
 }
 
