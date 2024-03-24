@@ -28,4 +28,27 @@ utils.rs contains the following functions:
 
 ## HMACAUTH-WEB
 
-The HMACAUTH-WEB is a Web project that uses the HMACAUTH-LIB to authenticate a request. It provides a api endpoint for test HMAC Authentication. and support web hosting for HMACAUTH-WASM (Web assembly).
+The HMACAUTH-WEB is a Simple Web project that uses the HMACAUTH-LIB to authenticate a request. It provides a api endpoint for test HMAC Authentication. and support web hosting for HMACAUTH-WASM (Web assembly).
+
+Example run HMACAUTH-WEB: (Just API endpoint)
+```bash
+RUST_LOG=debug ./target/debug/hmacauth_web
+```
+Example run HMACAUTH-WEB: (API endpoint and Static Web/Web Assembly hosting)
+```bash
+cd hmacauth_wasm
+./build.sh
+cd ..
+RUST_LOG=debug ./target/debug/hmacauth_web
+
+## HMACAUTH-WASM
+
+The HMACAUTH-WASM is a Simple WebAssembly project that uses the HMACAUTH-LIB to authenticate a request. It provides a way to authenticate a request using HMAC Authentication in the browser. This project is hosted on HMACAUTH-WEB but not yet implemented.
+
+## HMACAUTH-CLI
+The HMACAUTH-CLI is a Simple CLI project that uses the HMACAUTH-LIB to authenticate a request. It provides a way to authenticate a request using HMAC Authentication in the terminal.
+
+Example run HMACAUTH-CLI: (after running HMACAUTH-WEB)
+```bash
+RUST_LOG=debug ./target/debug/hmacauth_cli --url "http://localhost:8080/apis/v1/payload" --request-id "request_id_123456" --message "Hello World" --access-key "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ="
+```
