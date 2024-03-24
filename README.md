@@ -60,3 +60,12 @@ Example run HMACAUTH-CLI: (after running HMACAUTH-WEB)
 ```bash
 RUST_LOG=debug ./target/debug/hmacauth_cli --url "http://localhost:8080/apis/v1/payload" --request-id "request_id_123456" --message "Hello World" --access-key "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ="
 ```
+
+## Testing
+You can run the test by running the following command: (root project)
+```bash
+
+./run_web.sh #(please setup the STATIC_FOLDER environment variable before running this command)
+
+./run_cli.sh
+```
