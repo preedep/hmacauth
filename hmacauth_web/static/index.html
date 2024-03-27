@@ -1,22 +1,20 @@
 <body>
-<script type="module">
-    import * as wasm from "./static/pkg/hmacauth_wasm.js";
-
-    wasm.default().then((module) => {
-
-        wasm.http_post_payload(
-            "http://localhost:8080/apis/v1/payload",
-            "request_123456",
-            "Hello World",
-            "IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=",
-            myCallback);
-    });
-
-    function myCallback(result) {
-        console.log(`Callback received result: ${result}`);
-        document.getElementById("output").innerHTML = result;
-    }
+<!-- index.html -->
+<script>
+    const importObject = {
+        env: {
+            // Define any environment variables if needed
+        },
+    };
+    fetch('./static/pkg/hmacauth_wasm.wasm')
+        .then(response => response.arrayBuffer())
+        .then(bytes => WebAssembly.instantiate(bytes, importObject))
+        .then(({ instance }) => {
+            //console.log(instance.exports);
+        }
+        );
 </script>
+
 
 <h1>Hello World</h1>
 <div id="output"></div>

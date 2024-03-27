@@ -3,8 +3,10 @@ use web_sys::console;
 
 extern crate hmacauth_lib;
 
-use hmacauth_lib::models::Payload;
-use hmacauth_lib::utils::get_request_header;
+//use hmacauth_lib::models::Payload;
+//use hmacauth_lib::utils::get_request_header;
+
+
 
 #[wasm_bindgen]
 pub fn http_post_payload(url: String,
@@ -15,7 +17,7 @@ pub fn http_post_payload(url: String,
 ) -> String {
     let result = format!("Hello, {}", message);
 
-    let payload = Payload {
+    let payload = hmacauth_lib::models::Payload {
         message: Some(message.clone()),
     };
     let payload_str = serde_json::to_string(&payload).unwrap();
@@ -28,7 +30,7 @@ pub fn http_post_payload(url: String,
     console::log_1(&JsValue::from_str(&format!("message: {}", message)));
     console::log_1(&JsValue::from_str(&format!("access key {}", access_key)));
 
-    let _headers = get_request_header(
+    let _headers = hmacauth_lib::utils::get_request_header(
         &url.parse().unwrap(),
         &method,
         &request_id,

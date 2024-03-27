@@ -5,6 +5,6 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [workspace]
-members = ["hmacauth_lib", "hmacauth_cli", "hmacauth_wasm", "hmacauth_web"]
+members = ["hmacauth_lib","hmacauth_desktop" ,"hmacauth_cli", "hmacauth_wasm", "hmacauth_web"]
 
 [dependencies]
