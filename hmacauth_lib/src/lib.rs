@@ -2,9 +2,8 @@
 //    left + right
 //}
 
-
-pub mod utils;
 pub mod models;
+pub mod utils;
 
 #[cfg(test)]
 mod tests {
@@ -25,10 +24,8 @@ mod tests {
         let http_method = "GET".to_string();
         let http_date = "Sun, 06 Nov 1994 08:49:37 GMT".to_string();
         let json_payload = "Hello, world!".to_string();
-        let (compute_hash, string_to_sign) = utils::generate_string_to_sign(&url,
-                                                                            &http_method,
-                                                                            &vec![&http_date],
-                                                                            &json_payload);
+        let (compute_hash, string_to_sign) =
+            utils::generate_string_to_sign(&url, &http_method, &vec![&http_date], &json_payload);
 
         assert_eq!(compute_hash, "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=");
         assert_eq!(string_to_sign, "GET\n/apis/v1/hello?version=2024-03-01\nSun, 06 Nov 1994 08:49:37 GMT;example.com;MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=");
@@ -40,10 +37,8 @@ mod tests {
         let http_method = "GET".to_string();
         let http_date = "Sun, 06 Nov 1994 08:49:37 GMT".to_string();
         let json_payload = "Hello, world!".to_string();
-        let (compute_hash, string_to_sign) = utils::generate_string_to_sign(&url,
-                                                                            &http_method,
-                                                                            &vec![&http_date],
-                                                                            &json_payload);
+        let (compute_hash, string_to_sign) =
+            utils::generate_string_to_sign(&url, &http_method, &vec![&http_date], &json_payload);
 
         assert_eq!(compute_hash, "MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=");
         assert_eq!(string_to_sign, "GET\n/apis/v1/hello\nSun, 06 Nov 1994 08:49:37 GMT;example.com;MV9b23bQeMQ7isAGTkoBZGErH853yGk0W/yUx1iU7dM=");

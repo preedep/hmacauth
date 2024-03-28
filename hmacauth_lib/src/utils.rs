@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-use base64::{Engine as _, engine::general_purpose};
+use base64::{engine::general_purpose, Engine as _};
 use hmac::{Hmac, Mac};
 use httpdate::fmt_http_date;
 use log::debug;
@@ -33,7 +33,7 @@ pub fn compute_signature(string_to_signed: &String, secret: &String) -> String {
             .decode(secret)
             .expect("HMAC compute decode secret failed"),
     )
-        .expect("HMAC compute_signature can take key of any size");
+    .expect("HMAC compute_signature can take key of any size");
 
     mac.update(string_to_signed.as_bytes());
 
@@ -55,18 +55,27 @@ pub fn get_request_header(
     let http_date = fmt_http_date(now);
     let params = vec![&http_date];
 
-    let (compute_hash, string_to_sign) = generate_string_to_sign(
-        url_endpoint,
-        http_method,
-        &params,
-        json_payload);
+    let (compute_hash, string_to_sign) =
+        generate_string_to_sign(url_endpoint, http_method, &params, json_payload);
     debug!("{}\r\n", string_to_sign);
 
-    header.insert("Content-Type".to_string(), "application/json".parse().unwrap());
-    header.insert("repeatability-request-id".to_string(), request_id.parse().unwrap());
-    header.insert("repeatability-first-sent".to_string(), http_date.parse().unwrap());
+    header.insert(
+        "Content-Type".to_string(),
+        "application/json".parse().unwrap(),
+    );
+    header.insert(
+        "repeatability-request-id".to_string(),
+        request_id.parse().unwrap(),
+    );
+    header.insert(
+        "repeatability-first-sent".to_string(),
+        http_date.parse().unwrap(),
+    );
     header.insert("x-ms-date".to_string(), http_date.clone().parse().unwrap());
-    header.insert("x-ms-content-sha256".to_string(), compute_hash.parse().unwrap());
+    header.insert(
+        "x-ms-content-sha256".to_string(),
+        compute_hash.parse().unwrap(),
+    );
 
     let authorization = format!(
         "HMAC-SHA256 SignedHeaders=x-ms-date;host;x-ms-content-sha256&Signature={}",
@@ -79,22 +88,28 @@ pub fn get_request_header(
     Ok(header)
 }
 
-pub fn generate_string_to_sign(url_endpoint: &Url,
-                               http_method: &String,
-                               /*http_date: &String,*/
-                               params: &Vec<&String>,
-                               json_payload: &String) -> (String, String) {
+pub fn generate_string_to_sign(
+    url_endpoint: &Url,
+    http_method: &String,
+    /*http_date: &String,*/
+    params: &Vec<&String>,
+    json_payload: &String,
+) -> (String, String) {
     let compute_hash = compute_content_sha256(json_payload);
 
     //let now = SystemTime::now();
     //let http_date = fmt_http_date(now);
 
-    let host_authority = format!("{}", url_endpoint.host().unwrap(), );
+    let host_authority = format!("{}", url_endpoint.host().unwrap(),);
     let path_and_query = match url_endpoint.query() {
         Some(query) => format!("{}?{}", url_endpoint.path(), query),
         None => format!("{}", url_endpoint.path()),
     };
-    let params = params.iter().map(|x| x.to_string()).collect::<Vec<String>>().join("\n");
+    let params = params
+        .iter()
+        .map(|x| x.to_string())
+        .collect::<Vec<String>>()
+        .join("\n");
     debug!("params for : generate_string_to_sign {}", params);
     //let path_and_query = format!("{}?{}", url_endpoint.path(), url_endpoint.query().unwrap());
     let string_to_sign = format!(

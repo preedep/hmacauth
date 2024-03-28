@@ -8,13 +8,12 @@ use hmacauth_lib::utils::get_request_header;
 
 slint::include_modules!();
 
-
 fn main() -> Result<(), slint::PlatformError> {
     pretty_env_logger::init();
 
     let ui = AppWindow::new()?;
 
-    /* 
+    /*
     ui.on_request_increase_value({
         let ui_handle = ui.as_weak();
         move || {
@@ -38,7 +37,8 @@ fn main() -> Result<(), slint::PlatformError> {
 
             let payload_str = serde_json::to_string(&Payload {
                 message: Some(message),
-            }).unwrap();
+            })
+            .unwrap();
 
             let method = "POST".to_string();
 
@@ -67,7 +67,6 @@ fn main() -> Result<(), slint::PlatformError> {
             }
         }
     });
-
 
     ui.run()
 }
