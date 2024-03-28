@@ -1,16 +1,49 @@
-import { Button, VerticalBox } from "std-widgets.slint";
+import { Button, VerticalBox, HorizontalBox, TextEdit } from "std-widgets.slint";
 
 export component AppWindow inherits Window {
     in-out property<int> counter: 42;
-    callback request-increase-value();
+    in-out property<string> message: "Hello World";
+    in-out property <string> shared_key:"IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=";
+    in-out property <string> authorization;
+
+    width: 400pt;
+    height: 250pt;
+    title: "HMAC-SHA256 Authentication Client Demo";
+    //callback request-increase-value();
+    callback request-api-call();
+
     VerticalBox {
-        Text {
-            text: "Counter: \{root.counter}";
+        HorizontalBox {
+            Text {
+                text: "Message : ";
+                
+            }
+            TextEdit {
+                text: "Hello World";
+            }
+        }
+        HorizontalBox {
+            Text {
+                text: "Shared Key : ";
+            }
+            TextEdit {
+                text: shared_key;
+            }
+        }
+        HorizontalBox {
+            Text {
+                
+                text: "Authorization : ";
+            }
+            TextInput {
+                text: authorization;
+            }
         }
         Button {
-            text: "Increase value";
+            text: "Call API";
             clicked => {
-                root.request-increase-value();
+                //root.request-increase-value();
+                root.request-api-call();
             }
         }
     }
