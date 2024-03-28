@@ -58,13 +58,14 @@ async fn main() {
     }
 
     let start = Instant::now();
-    let result = reqwest::Client::new().post(&args.url)
+    let result = reqwest::Client::new()
+        .post(&args.url)
         .headers(header_map)
         .json(&Payload {
             message: Some(args.message.clone()),
-        }
-        )
-        .send().await;
+        })
+        .send()
+        .await;
 
     // Calculate elapsed time
     let elapsed = start.elapsed();
@@ -72,9 +73,17 @@ async fn main() {
     match result {
         Ok(response) => {
             if response.status().is_success() {
-                info!("Success: {} with Execution time: {:.2?}", response.status(),elapsed);
+                info!(
+                    "Success: {} with Execution time: {:.2?}",
+                    response.status(),
+                    elapsed
+                );
             } else {
-                error!("Error: {} with Execution time: {:.2?}", response.status(),elapsed);
+                error!(
+                    "Error: {} with Execution time: {:.2?}",
+                    response.status(),
+                    elapsed
+                );
             }
             info!("Response: {:#?}", response);
         }

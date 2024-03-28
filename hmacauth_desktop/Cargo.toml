@@ -1,0 +1,20 @@
+[package]
+name = "hmacauth_desktop"
+version = "0.1.0"
+authors = ["Preedee Ponchevin <preedee.digital@gmail.com>"]
+edition = "2021"
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+slint = "1.5"
+hmacauth_lib = { path = "../hmacauth_lib" }
+reqwest = { version = "0.12", features = ["rustls-tls", "json"] }
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+pretty_env_logger = "0.5"
+
+[build-dependencies]
+slint-build = "1.5"

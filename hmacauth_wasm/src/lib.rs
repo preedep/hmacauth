@@ -1,18 +1,22 @@
+extern crate hmacauth_lib;
+
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
-use hmacauth_lib::models::Payload;
+//use hmacauth_lib::models::Payload;
+//use hmacauth_lib::utils::get_request_header;
 
 #[wasm_bindgen]
-pub fn http_post_payload(url: String,
-                         request_id: String,
-                         message: String,
-                         access_key: String,
-                         f_callback: &js_sys::Function,
+pub fn http_post_payload(
+    url: String,
+    request_id: String,
+    message: String,
+    access_key: String,
+    _f_callback: &js_sys::Function,
 ) -> String {
     let result = format!("Hello, {}", message);
 
-    let payload = Payload {
+    let payload = hmacauth_lib::models::Payload {
         message: Some(message.clone()),
     };
     let payload_str = serde_json::to_string(&payload).unwrap();
@@ -25,6 +29,13 @@ pub fn http_post_payload(url: String,
     console::log_1(&JsValue::from_str(&format!("message: {}", message)));
     console::log_1(&JsValue::from_str(&format!("access key {}", access_key)));
 
+    let _headers = hmacauth_lib::utils::get_request_header(
+        &url.parse().unwrap(),
+        &method,
+        &request_id,
+        &payload_str,
+        &access_key,
+    );
     /*
     let mut closure = Closure::wrap(Box::new(move |url: String,
                                                    method:String,
