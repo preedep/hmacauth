@@ -3,7 +3,6 @@ extern crate hmacauth_lib;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
-
 //use hmacauth_lib::models::Payload;
 //use hmacauth_lib::utils::get_request_header;
 
