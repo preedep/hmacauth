@@ -1,8 +1,3 @@
-use std::time::Instant;
-use reqwest::header::HeaderMap;
-use hmacauth_lib::utils::get_request_header;
-use log::{debug, info};
-use hmacauth_lib::models::Payload;
 slint::include_modules!();
 
 

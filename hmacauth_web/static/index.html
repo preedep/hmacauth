@@ -9,9 +9,9 @@
     fetch('./static/pkg/hmacauth_wasm.wasm')
         .then(response => response.arrayBuffer())
         .then(bytes => WebAssembly.instantiate(bytes, importObject))
-        .then(({ instance }) => {
-            //console.log(instance.exports);
-        }
+        .then(({instance}) => {
+                //console.log(instance.exports);
+            }
         );
 </script>
 

@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use url::Url;
 
-
 #[derive(Debug, Serialize, Deserialize)]
 pub struct HMACAuthSignedHeader {
     pub params: Vec<String>,
