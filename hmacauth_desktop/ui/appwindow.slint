@@ -7,9 +7,11 @@ export component AppWindow inherits Window {
     in-out property<string> message: "Hello World";
     in-out property <string> shared_key:"IbNSH3Lc5ffMHo/wnQuiOD4C0mx5FqDmVMQaAMKFgaQ=";
     in-out property <string> authorization;
-
+    
+   
     width: 700pt;
     height: 350pt;
+    
     title: "HMAC-SHA256 Authentication Client Demo";
     //callback request-increase-value();
     callback request-api-call();
@@ -19,8 +21,10 @@ export component AppWindow inherits Window {
             Text {
                 text: "URL : ";
                 vertical-alignment: center;
+                width: 50pt;
             }
             TextEdit {
+                
                 text: url;
             }
         }
@@ -28,6 +32,7 @@ export component AppWindow inherits Window {
             Text {
                 text: "Request ID : ";
                 vertical-alignment: center;
+                width: 50pt;
             }
             TextEdit {
                 text: request_id;
@@ -37,6 +42,7 @@ export component AppWindow inherits Window {
             Text {
                 text: "Message : ";
                 vertical-alignment: center;
+                width: 50pt;
             }
             TextEdit {
                 text: message;
@@ -46,6 +52,7 @@ export component AppWindow inherits Window {
             Text {
                 text: "Shared Key : ";
                 vertical-alignment: center;
+                width: 50pt;
             }
             TextEdit {
                 text: shared_key;
@@ -61,11 +68,14 @@ export component AppWindow inherits Window {
                 vertical-alignment: center;
             }
         }
+        HorizontalLayout{
+            alignment: center;
         Button {
             text: "Call API";
             clicked => {
                 //root.request-increase-value();
                 root.request-api-call();
+                }
             }
         }
     }
