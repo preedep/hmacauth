@@ -36,7 +36,7 @@ fn main() -> Result<(), slint::PlatformError> {
             debug!("message: {}", message);
 
             let payload_str = serde_json::to_string(&Payload {
-                message: Some(message),
+                message: Some(message.clone()),
             })
             .unwrap();
 
@@ -58,6 +58,31 @@ fn main() -> Result<(), slint::PlatformError> {
                         }
                     });
                     let header_map: HeaderMap = (&header).try_into().expect("valid headers");
+
+                    let client = reqwest::blocking::Client::new();
+                    let result = client
+                        .post(&url)
+                        .headers(header_map)
+                        .json(&Payload {
+                            message: Some(message.clone()),
+                        })
+                        .send();
+                    match result {
+                        Ok(response) => {
+                            let status = response.status();
+                            let body = response.text().unwrap();
+                            info!("status: {}", status);
+                            info!("body: {}", body);
+                            //ui.set_response_status(status.to_string().into());
+                            //ui.set_response_body(body.into());
+                        }
+                        Err(e) => {
+                            //error!("{}", e);
+                            let error_message = format!("Error : {}", e);
+                            //ui.set_response_status(error_message.into());
+                            ui.set_authorization(error_message.into());
+                        }
+                    }
                 }
                 Err(e) => {
                     //error!("{}", e);
