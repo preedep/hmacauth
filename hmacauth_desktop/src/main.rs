@@ -13,7 +13,7 @@ slint::include_modules!();
 pub fn show_info_dialog(message: SharedString) {
     slint::slint!{
         import { StandardButton, VerticalBox } from "std-widgets.slint";
-        InfoDialog := Dialog {
+        export component InfoDialog {
             in-out property <string> info_text: "Information";
             VerticalBox {
                 alignment: start;
@@ -24,6 +24,10 @@ pub fn show_info_dialog(message: SharedString) {
             }
         }
     }
+    let dialog = InfoDialog::new().unwrap();
+    dialog.set_info_text(message);
+    let _ = dialog.run();
+
 }
 fn main() -> Result<(), slint::PlatformError> {
     pretty_env_logger::init();
