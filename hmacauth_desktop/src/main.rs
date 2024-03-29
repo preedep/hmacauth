@@ -1,4 +1,3 @@
-
 use std::time::Instant;
 
 use log::{debug, info};
@@ -11,7 +10,7 @@ use hmacauth_lib::utils::get_request_header;
 slint::include_modules!();
 
 pub fn show_info_dialog(message: SharedString) {
-    slint::slint!{
+    slint::slint! {
         import { StandardButton, VerticalBox } from "std-widgets.slint";
         export component InfoDialog {
             in-out property <string> info_text: "Information";
@@ -27,8 +26,8 @@ pub fn show_info_dialog(message: SharedString) {
     let dialog = InfoDialog::new().unwrap();
     dialog.set_info_text(message);
     let _ = dialog.run();
-
 }
+
 fn main() -> Result<(), slint::PlatformError> {
     pretty_env_logger::init();
 
@@ -60,7 +59,7 @@ fn main() -> Result<(), slint::PlatformError> {
             let payload_str = serde_json::to_string(&Payload {
                 message: Some(message.clone()),
             })
-            .unwrap();
+                .unwrap();
 
             let method = "POST".to_string();
 

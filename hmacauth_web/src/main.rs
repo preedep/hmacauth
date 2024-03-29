@@ -2,8 +2,8 @@ use std::env;
 
 use actix_files as fs;
 use actix_files::NamedFile;
+use actix_web::{App, HttpRequest, HttpResponse, HttpServer, web};
 use actix_web::middleware::Logger;
-use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer};
 use log::{debug, error, info};
 
 use hmacauth_lib::{models, utils};
@@ -98,7 +98,7 @@ async fn main() -> std::io::Result<()> {
             .route("/", actix_web::web::get().to(index))
             .route("/apis/v1/payload", web::post().to(payload_handler))
     })
-    .bind(("0.0.0.0", 8080))?
-    .run()
-    .await
+        .bind(("0.0.0.0", 8080))?
+        .run()
+        .await
 }

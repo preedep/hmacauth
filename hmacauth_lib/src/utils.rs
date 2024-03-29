@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::time::SystemTime;
 
-use base64::{engine::general_purpose, Engine as _};
+use base64::{Engine as _, engine::general_purpose};
 use hmac::{Hmac, Mac};
 use httpdate::fmt_http_date;
 use log::debug;
@@ -33,7 +33,7 @@ pub fn compute_signature(string_to_signed: &String, secret: &String) -> String {
             .decode(secret)
             .expect("HMAC compute decode secret failed"),
     )
-    .expect("HMAC compute_signature can take key of any size");
+        .expect("HMAC compute_signature can take key of any size");
 
     mac.update(string_to_signed.as_bytes());
 
@@ -100,7 +100,7 @@ pub fn generate_string_to_sign(
     //let now = SystemTime::now();
     //let http_date = fmt_http_date(now);
 
-    let host_authority = format!("{}", url_endpoint.host().unwrap(),);
+    let host_authority = format!("{}", url_endpoint.host().unwrap(), );
     let path_and_query = match url_endpoint.query() {
         Some(query) => format!("{}?{}", url_endpoint.path(), query),
         None => format!("{}", url_endpoint.path()),
