@@ -1,13 +1,34 @@
+
 use std::time::Instant;
 
 use log::{debug, info};
 use reqwest::header::HeaderMap;
+use slint::SharedString;
 
 use hmacauth_lib::models::Payload;
 use hmacauth_lib::utils::get_request_header;
 
 slint::include_modules!();
 
+pub fn show_info_dialog(message: SharedString) {
+    slint::slint!{
+        import { StandardButton, VerticalBox } from "std-widgets.slint";
+        export component InfoDialog {
+            in-out property <string> info_text: "Information";
+            VerticalBox {
+                alignment: start;
+                Text {
+                    text: info_text;
+                }
+                StandardButton { kind: close; }
+            }
+        }
+    }
+    let dialog = InfoDialog::new().unwrap();
+    dialog.set_info_text(message);
+    let _ = dialog.run();
+
+}
 fn main() -> Result<(), slint::PlatformError> {
     pretty_env_logger::init();
 
@@ -36,7 +57,7 @@ fn main() -> Result<(), slint::PlatformError> {
             debug!("message: {}", message);
 
             let payload_str = serde_json::to_string(&Payload {
-                message: Some(message),
+                message: Some(message.clone()),
             })
             .unwrap();
 
@@ -58,6 +79,32 @@ fn main() -> Result<(), slint::PlatformError> {
                         }
                     });
                     let header_map: HeaderMap = (&header).try_into().expect("valid headers");
+
+                    let client = reqwest::blocking::Client::new();
+                    let result = client
+                        .post(&url)
+                        .headers(header_map)
+                        .json(&Payload {
+                            message: Some(message.clone()),
+                        })
+                        .send();
+                    match result {
+                        Ok(response) => {
+                            let status = response.status();
+                            let body = response.text().unwrap();
+                            info!("status: {}", status);
+                            info!("body: {}", body);
+                            //ui.set_response_status(status.to_string().into());
+                            //ui.set_response_body(body.into());
+                            show_info_dialog(body.into());
+                        }
+                        Err(e) => {
+                            //error!("{}", e);
+                            let error_message = format!("Error : {}", e);
+                            //ui.set_response_status(error_message.into());
+                            ui.set_authorization(error_message.into());
+                        }
+                    }
                 }
                 Err(e) => {
                     //error!("{}", e);
