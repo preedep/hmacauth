@@ -1,13 +1,33 @@
+
 use std::time::Instant;
 
 use log::{debug, info};
 use reqwest::header::HeaderMap;
+use slint::SharedString;
 
 use hmacauth_lib::models::Payload;
 use hmacauth_lib::utils::get_request_header;
 
 slint::include_modules!();
 
+pub fn show_info_dialog(message: SharedString) {
+    slint::slint!{
+        import { StandardButton, VerticalBox } from "std-widgets.slint";
+        InfoDialog := Dialog {
+            property <string> info_text: "Information";
+            VerticalBox {
+                alignment: start;
+                Text {
+                    text: info_text;
+                }
+                StandardButton { kind: close; }
+            }
+        }
+    }
+    //let info_dialog = InfoDialog::new();
+    //info_dialog.set_info_text(message);
+    //info_dialog.expect("Error").run();
+}
 fn main() -> Result<(), slint::PlatformError> {
     pretty_env_logger::init();
 
@@ -75,6 +95,7 @@ fn main() -> Result<(), slint::PlatformError> {
                             info!("body: {}", body);
                             //ui.set_response_status(status.to_string().into());
                             //ui.set_response_body(body.into());
+                            show_info_dialog(body.into());
                         }
                         Err(e) => {
                             //error!("{}", e);
