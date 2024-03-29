@@ -34,6 +34,7 @@ fn main() -> Result<(), slint::PlatformError> {
 
     let ui = AppWindow::new()?;
 
+
     /*
     ui.on_request_increase_value({
         let ui_handle = ui.as_weak();
