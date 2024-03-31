@@ -1,5 +1,3 @@
-use std::time::Instant;
-
 use log::{debug, info};
 use reqwest::header::HeaderMap;
 use slint::SharedString;
@@ -32,7 +30,6 @@ fn main() -> Result<(), slint::PlatformError> {
     pretty_env_logger::init();
 
     let ui = AppWindow::new()?;
-
 
     /*
     ui.on_request_increase_value({
